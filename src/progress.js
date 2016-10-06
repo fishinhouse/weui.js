@@ -11,19 +11,19 @@
             options.value = 100;
         }
 
-        const $progress = this.find('.weui_progress_inner_bar');
+        const $progress = this.find('.weui-progress__inner-bar');
         if($progress.length === 0){
-            const opr = typeof options.onClick === 'function' ? `<a href="javascript:;" class="weui_progress_opr">
-                    <i class="weui_icon_cancel"></i>
+            const opr = typeof options.onClick === 'function' ? `<a href="javascript:;" class="weui-progress__opr">
+                    <i class="weui-icon-cancel"></i>
                 </a>` : '';
-            const html = `<div class="weui_progress">
-                <div class="weui_progress_bar">
-                    <div class="weui_progress_inner_bar" style="width: ${options.value}%;"></div>
+            const html = `<div class="weui-progress">
+                <div class="weui-progress__bar">
+                    <div class="weui-progress__inner-bar" style="width: ${options.value}%;"></div>
                 </div>
                 ${opr}
             </div>`;
             if (typeof options.onClick === 'function'){
-                this.on('click', '.weui_progress_opr', () => {
+                this.on('click', '.weui-progress__opr', () => {
                     options.onClick.call(this);
                 });
             }

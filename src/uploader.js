@@ -24,24 +24,24 @@
 
         }, options);
 
-        const html = `<div class="weui_uploader">
-                        <div class="weui_uploader_hd weui_cell">
-                            <div class="weui_cell_bd weui_cell_primary">${options.title}</div>
-                            <div class="weui_cell_ft">0/${options.maxCount}</div>
+        const html = `<div class="weui-uploader">
+                        <div class="weui-uploader__hd">
+                            <div class="weui-uploader__title">${options.title}</div>
+                            <div class="weui-uploader__info">0/${options.maxCount}</div>
                         </div>
-                        <div class="weui_uploader_bd">
-                            <ul class="weui_uploader_files">
+                        <div class="weui-uploader__bd">
+                            <ul class="weui-uploader__files">
                             </ul>
-                            <div class="weui_uploader_input_wrp">
-                                <input class="weui_uploader_input" type="file" accept="${options.accept.join(',')}">
+                            <div class="weui-uploader__input-box">
+                                <input class="weui-uploader__input" type="file" accept="${options.accept.join(',')}">
                             </div>
                         </div>
                     </div>`;
         this.html(html);
 
         const $uploader = this;
-        const $files = this.find('.weui_uploader_files');
-        const $file = this.find('.weui_uploader_input');
+        const $files = this.find('.weui-uploader__files');
+        const $file = this.find('.weui-uploader__input');
         let blobs = [];
 
         /**
@@ -63,17 +63,17 @@
          * error
          */
         function error(index) {
-            const $preview = $files.find('.weui_uploader_file').eq(index);
-            $preview.addClass('weui_uploader_status');
-            $preview.html(`<div class="weui_uploader_status_content"><i class="weui_icon_warn"></i></div>`);
+            const $preview = $files.find('.weui-uploader__file').eq(index);
+            $preview.addClass('weui-uploader__file_status');
+            $preview.html(`<div class="weui-uploader__file-content"><i class="weui-icon-warn"></i></div>`);
         }
 
         /**
          * success
          */
         function success(index) {
-            const $preview = $files.find('.weui_uploader_file').eq(index);
-            $preview.removeClass('weui_uploader_status');
+            const $preview = $files.find('.weui-uploader__file_status').eq(index);
+            $preview.removeClass('weui-uploader__file-content');
             $preview.html('');
         }
 
@@ -82,9 +82,9 @@
          * @param msg
          */
         function update(msg) {
-            const $preview = $files.find('.weui_uploader_file').last();
-            $preview.addClass('weui_uploader_status');
-            $preview.html(`<div class="weui_uploader_status_content">${msg}</div>`);
+            const $preview = $files.find('.weui-uploader__file').last();
+            $preview.addClass('weui-uploader__file_status');
+            $preview.html(`<div class="weui-uploader__file-content">${msg}</div>`);
         }
 
         /**
@@ -152,8 +152,8 @@
                         blobs.push({name: file.name, blob: blob});
                         const blobUrl = URL.createObjectURL(blob);
 
-                        $files.append(`<li class="weui_uploader_file " style="background-image:url(${blobUrl})"></li>`);
-                        $uploader.find('.weui_uploader_hd .weui_cell_ft').text(`${blobs.length}/${options.maxCount}`);
+                        $files.append(`<li class="weui-uploader__file " style="background-image:url(${blobUrl})"></li>`);
+                        $uploader.find('.weui-uploader__hd .weui-cell__ft').text(`${blobs.length}/${options.maxCount}`);
 
                         // trigger onAddedfile event
                         options.onAddedFile({
@@ -173,7 +173,7 @@
 
                         // 如果数量达到最大, 隐藏起选择文件按钮
                         if (blobs.length >= options.maxCount) {
-                            $uploader.find('.weui_uploader_input_wrp').hide();
+                            $uploader.find('.weui-uploader__input-box').hide();
                         }
                     };
 
@@ -183,7 +183,7 @@
             });
         });
 
-        this.on('click', '.weui_uploader_file', () => {
+        this.on('click', '.weui-uploader__file', () => {
             $.weui.confirm('确定删除该图片?', () => {
                 const index = $(this).index();
                 this.remove(index);
@@ -203,14 +203,14 @@
          * @param index
          */
         this.remove = function (index) {
-            const $preview = $files.find('.weui_uploader_file').eq(index);
+            const $preview = $files.find('.weui-uploader__file').eq(index);
             $preview.remove();
             blobs.splice(index, 1);
             options.onRemovedfile(index);
 
             // 如果数量达到最大, 隐藏起选择文件按钮
             if (blobs.length < options.maxCount) {
-                $uploader.find('.weui_uploader_input_wrp').show();
+                $uploader.find('.weui-uploader__input-box').show();
             }
         };
 

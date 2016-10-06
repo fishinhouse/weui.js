@@ -35,12 +35,12 @@
         }, options);
 
         var buttons = options.buttons.map(function (button) {
-            return '<a href="javascript:;" class="weui_btn_dialog ' + button.type + '">' + button.label + '</a>';
+            return '<a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_' + button.type + '">' + button.label + '</a>';
         }).join('\n');
-        var html = '<div class="' + options.className + '">\n                <div class="weui_mask"></div>\n                <div class="weui_dialog">\n                    <div class="weui_dialog_hd">\n                        <strong class="weui_dialog_title">\n                            ' + options.title + '\n                        </strong>\n                    </div>\n                    <div class="weui_dialog_bd">\n                        ' + options.content + '\n                    </div>\n                    <div class="weui_dialog_ft">\n                        ' + buttons + '\n                    </div>\n                </div>\n            </div>';
+        var html = '<div class="' + options.className + '">\n                <div class="weui-mask"></div>\n                <div class="weui-dialog">\n                    <div class="weui-dialog__hd">\n                        <strong class="weui-dialog__title">\n                            ' + options.title + '\n                        </strong>\n                    </div>\n                    <div class="weui-dialog__bd">\n                        ' + options.content + '\n                    </div>\n                    <div class="weui-dialog__ft">\n                        ' + buttons + '\n                    </div>\n                </div>\n            </div>';
         $dialog = $(html);
         $('body').append($dialog);
-        $dialog.on('click', '.weui_btn_dialog', function () {
+        $dialog.on('click', '.weui-dialog__btn', function () {
             var button = options.buttons[$(this).index()];
             var cb = button.onClick || $.noop;
             cb.call();
@@ -93,7 +93,7 @@
                 onClick: yes
             }]
         }, type ? {} : options);
-        options.className = 'weui_dialog_alert ' + options.className;
+        options.className = 'weui-dialog_alert ' + options.className;
 
         $.weui.dialog(options);
     };
@@ -111,8 +111,8 @@
      * @param {Object|Number|Function} [options]
      */
     $.weui.topTips = function () {
-        var content = arguments.length <= 0 || arguments[0] === undefined ? 'topTips' : arguments[0];
-        var options = arguments[1];
+        var content = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'topTips';
+        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
 
         if ($topTips) {
@@ -137,7 +137,7 @@
             duration: 3000,
             callback: $.noop
         }, options);
-        var html = '<div class="weui_toptips weui_warn">' + content + '</div>';
+        var html = '<div class="weui-toptips weui-toptips_warn">' + content + '</div>';
         $topTips = $(html);
         $topTips.appendTo($('body'));
         if (typeof $topTips.slideDown === 'function') {
@@ -175,33 +175,33 @@
      * @param {Array} actions
      */
     $.weui.actionSheet = function () {
-        var menus = arguments.length <= 0 || arguments[0] === undefined ? [] : arguments[0];
-        var actions = arguments.length <= 1 || arguments[1] === undefined ? [{ label: '取消' }] : arguments[1];
+        var menus = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
+        var actions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : [{ label: '取消' }];
 
         var cells = menus.map(function (item, idx) {
-            return '<div class="weui_actionsheet_cell">' + item.label + '</div>';
+            return '<div class="weui-actionsheet__cell">' + item.label + '</div>';
         }).join('');
         var action = actions.map(function (item, idx) {
-            return '<div class="weui_actionsheet_cell">' + item.label + '</div>';
+            return '<div class="weui-actionsheet__cell">' + item.label + '</div>';
         }).join('');
-        var html = '<div>\n            <div class="weui_mask_transition"></div>\n            <div class="weui_actionsheet">\n                <div class="weui_actionsheet_menu">\n                    ' + cells + '\n                </div>\n                <div class="weui_actionsheet_action">\n                    ' + action + '\n                </div>\n            </div>\n        </div>';
+        var html = '<div>\n            <div class="weui-mask"></div>\n            <div class="weui-actionsheet">\n                <div class="weui-actionsheet__menu">\n                    ' + cells + '\n                </div>\n                <div class="weui-actionsheet__action">\n                    ' + action + '\n                </div>\n            </div>\n        </div>';
 
         $actionSheetWrapper = $(html);
         $('body').append($actionSheetWrapper);
 
         // add class
-        $actionSheetWrapper.find('.weui_mask_transition').show().addClass('weui_fade_toggle');
-        $actionSheetWrapper.find('.weui_actionsheet').addClass('weui_actionsheet_toggle');
+        $actionSheetWrapper.find('.weui-mask').show();
+        $actionSheetWrapper.find('.weui-actionsheet').addClass('weui-actionsheet_toggle');
 
         // bind event
-        $actionSheetWrapper.on('click', '.weui_actionsheet_menu .weui_actionsheet_cell', function () {
+        $actionSheetWrapper.on('click', '.weui-actionsheet__menu .weui-actionsheet__cell', function () {
             var item = menus[$(this).index()];
             var cb = item.onClick || $.noop;
             cb.call();
             $.weui.hideActionSheet();
-        }).on('click', '.weui_mask_transition', function () {
+        }).on('click', '.weui-mask', function () {
             $.weui.hideActionSheet();
-        }).on('click', '.weui_actionsheet_action .weui_actionsheet_cell', function () {
+        }).on('click', '.weui-actionsheet__action .weui-actionsheet__cell', function () {
             var item = actions[$(this).index()];
             var cb = item.onClick || $.noop;
             cb.call();
@@ -214,16 +214,13 @@
             return;
         }
 
-        var $mask = $actionSheetWrapper.find('.weui_mask_transition');
-        var $actionsheet = $actionSheetWrapper.find('.weui_actionsheet');
+        var $mask = $actionSheetWrapper.find('.weui-mask');
+        var $actionsheet = $actionSheetWrapper.find('.weui-actionsheet');
 
-        $mask.removeClass('weui_fade_toggle');
-        $actionsheet.removeClass('weui_actionsheet_toggle');
+        $mask.hide();
+        $actionsheet.removeClass('weui-actionsheet_toggle');
 
-        $actionsheet.on('transitionend', function () {
-            $actionSheetWrapper.remove();
-            $actionSheetWrapper = null;
-        }).on('webkitTransitionEnd', function () {
+        $actionsheet.on('transitionend webkitTransitionEnd', function () {
             $actionSheetWrapper.remove();
             $actionSheetWrapper = null;
         });
@@ -261,7 +258,7 @@
                 onClick: yes || $.noop
             }]
         }, type ? {} : options);
-        options.className = 'weui_dialog_confirm ' + options.className;
+        options.className = 'weui-dialog_confirm ' + options.className;
 
         $.weui.dialog(options);
     };
@@ -302,7 +299,7 @@
                 msg = error.msg,
                 tips = $dom.attr(msg + "Tips") || $dom.attr("tips") || $dom.attr("placeholder");
             if (tips) $.weui.topTips(tips);
-            $dom.parents(".weui_cell").addClass("weui_cell_warn");
+            $dom.parents(".weui-cell").addClass("weui-cell_warn");
         }
     }
 
@@ -324,7 +321,7 @@
                 }
             }).on("focus", function () {
                 var $this = $(this);
-                $this.parents(".weui_cell").removeClass("weui_cell_warn");
+                $this.parents(".weui-cell").removeClass("weui-cell_warn");
             });
         });
     };
@@ -364,13 +361,13 @@
      * @param {String} content
      */
     $.weui.loading = function () {
-        var content = arguments.length <= 0 || arguments[0] === undefined ? 'loading...' : arguments[0];
+        var content = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'loading...';
 
         if ($loading) {
             return;
         }
 
-        var html = '<div class="weui_loading_toast">\n        <div class="weui_mask_transparent"></div>\n        <div class="weui_toast">\n            <div class="weui_loading">\n                <div class="weui_loading_leaf weui_loading_leaf_0"></div>\n                <div class="weui_loading_leaf weui_loading_leaf_1"></div>\n                <div class="weui_loading_leaf weui_loading_leaf_2"></div>\n                <div class="weui_loading_leaf weui_loading_leaf_3"></div>\n                <div class="weui_loading_leaf weui_loading_leaf_4"></div>\n                <div class="weui_loading_leaf weui_loading_leaf_5"></div>\n                <div class="weui_loading_leaf weui_loading_leaf_6"></div>\n                <div class="weui_loading_leaf weui_loading_leaf_7"></div>\n                <div class="weui_loading_leaf weui_loading_leaf_8"></div>\n                <div class="weui_loading_leaf weui_loading_leaf_9"></div>\n                <div class="weui_loading_leaf weui_loading_leaf_10"></div>\n                <div class="weui_loading_leaf weui_loading_leaf_11"></div>\n            </div>\n            <p class="weui_toast_content">' + content + '</p>\n        </div>\n    </div>';
+        var html = '\n            <div class="weui-loading_toast">\n                <div class="weui-mask_transparent"></div>\n                <div class="weui-toast">\n                    <i class="weui-loading weui-icon_toast"></i>\n                    <p class="weui-toast__content">' + content + '</p>\n                </div>\n            </div>\n        ';
         $loading = $(html);
         $('body').append($loading);
     };
@@ -400,12 +397,12 @@
             options.value = 100;
         }
 
-        var $progress = this.find('.weui_progress_inner_bar');
+        var $progress = this.find('.weui-progress__inner-bar');
         if ($progress.length === 0) {
-            var opr = typeof options.onClick === 'function' ? '<a href="javascript:;" class="weui_progress_opr">\n                    <i class="weui_icon_cancel"></i>\n                </a>' : '';
-            var html = '<div class="weui_progress">\n                <div class="weui_progress_bar">\n                    <div class="weui_progress_inner_bar" style="width: ' + options.value + '%;"></div>\n                </div>\n                ' + opr + '\n            </div>';
+            var opr = typeof options.onClick === 'function' ? '<a href="javascript:;" class="weui-progress__opr">\n                    <i class="weui-icon-cancel"></i>\n                </a>' : '';
+            var html = '<div class="weui-progress">\n                <div class="weui-progress__bar">\n                    <div class="weui-progress__inner-bar" style="width: ' + options.value + '%;"></div>\n                </div>\n                ' + opr + '\n            </div>';
             if (typeof options.onClick === 'function') {
-                this.on('click', '.weui_progress_opr', function () {
+                this.on('click', '.weui-progress__opr', function () {
                     options.onClick.call(_this);
                 });
             }
@@ -423,42 +420,42 @@
 (function ($) {
     $.fn.searchBar = function (options) {
         options = $.extend({
-            focusingClass: 'weui_search_focusing',
+            focusingClass: 'weui-search-bar_focusing',
             searchText: "搜索",
             cancelText: "取消"
         }, options);
 
-        var html = "<div class=\"weui_search_bar\">\n                    <form class=\"weui_search_outer\">\n                        <div class=\"weui_search_inner\">\n                            <i class=\"weui_icon_search\"></i>\n                            <input type=\"search\" class=\"weui_search_input\" id=\"weui_search_input\" placeholder=\"" + options.searchText + "\" required/>\n                            <a href=\"javascript:\" class=\"weui_icon_clear\"></a>\n                        </div>\n                        <label for=\"weui_search_input\" class=\"weui_search_text\">\n                            <i class=\"weui_icon_search\"></i>\n                            <span>" + options.searchText + "</span>\n                        </label>\n                    </form>\n                    <a href=\"javascript:\" class=\"weui_search_cancel\">" + options.cancelText + "</a>\n                </div>";
+        var html = "<div class=\"weui-search-bar\">\n                    <form class=\"weui-search-bar__form\">\n                        <div class=\"weui-search-bar__box\">\n                            <i class=\"weui-icon-search\"></i>\n                            <input type=\"search\" class=\"weui-search-bar__input\" id=\"weui-search-bar__input\" placeholder=\"" + options.searchText + "\" required/>\n                            <a href=\"javascript:\" class=\"weui-icon-clear\"></a>\n                        </div>\n                        <label for=\"weui-search-bar__input\" class=\"weui-search-bar__label\">\n                            <i class=\"weui-icon-search\"></i>\n                            <span>" + options.searchText + "</span>\n                        </label>\n                    </form>\n                    <a href=\"javascript:\" class=\"weui-search-bar__cancel-btn\">" + options.cancelText + "</a>\n                </div>";
 
         var $search = $(html);
         this.append($search);
 
-        var $searchBar = this.find('.weui_search_bar');
-        var $searchText = this.find('.weui_search_text');
-        var $searchInput = this.find('.weui_search_input');
+        var $searchBar = this.find('.weui-search-bar');
+        var $searchText = this.find('.weui-search-bar__label');
+        var $searchInput = this.find('.weui-search-bar__input');
 
-        this.on('focus', '#weui_search_input', function () {
+        this.on('focus', '#weui-search-bar__input', function () {
             $searchText.hide();
             $searchBar.addClass(options.focusingClass);
             bindEvent($searchInput, 'onfocus', options);
-        }).on('blur', '#weui_search_input', function () {
+        }).on('blur', '#weui-search-bar__input', function () {
             $searchBar.removeClass(options.focusingClass);
             !!$(this).val() ? $searchText.hide() : $searchText.show();
             bindEvent($searchInput, 'onblur', options);
-        }).on('touchend', '.weui_search_cancel', function () {
+        }).on('touchend', '.weui-search-bar__cancel-btn', function () {
             $searchInput.val('');
             bindEvent($searchInput, 'oncancel', options);
-        }).on('touchend', '.weui_icon_clear', function (e) {
+        }).on('touchend', '.weui-icon-clear', function (e) {
             //阻止默认动作
             e.preventDefault();
             $searchInput.val('');
-            if (document.activeElement.id != 'search_input') {
+            if (document.activeElement.id != 'weui-search-bar__input') {
                 $searchInput.trigger('focus');
             }
             bindEvent($searchInput, 'onclear', options);
-        }).on('input', '.weui_search_input', function () {
+        }).on('input', '.weui-search-bar__input', function () {
             bindEvent($searchInput, 'input', options);
-        }).on('submit', '.weui_search_outer', function () {
+        }).on('submit', '.weui-search-bar__form', function () {
             if (typeof options.onsubmit == 'function') {
                 bindEvent($searchInput, 'onsubmit', options);
                 return false;
@@ -480,11 +477,11 @@
     $.fn.tab = function (options) {
         options = $.extend({
             defaultIndex: 0,
-            activeClass: 'weui_bar_item_on',
+            activeClass: 'weui-bar__item_on',
             onToggle: $.noop
         }, options);
-        var $tabbarItems = this.find('.weui_tabbar_item, .weui_navbar_item');
-        var $tabBdItems = this.find('.weui_tab_bd_item');
+        var $tabbarItems = this.find('.weui-tabbar__item, .weui-navbar__item');
+        var $tabBdItems = this.find('.weui-tab__panel');
 
         this.toggle = function (index) {
             var $defaultTabbarItem = $tabbarItems.eq(index);
@@ -497,7 +494,7 @@
         };
         var self = this;
 
-        this.on('click', '.weui_tabbar_item, .weui_navbar_item', function (e) {
+        this.on('click', '.weui-tabbar__item, .weui-navbar__item', function (e) {
             var index = $(this).index();
             self.toggle(index);
         });
@@ -520,8 +517,8 @@
      * @param {Object|Number} [options]
      */
     $.weui.toast = function () {
-        var content = arguments.length <= 0 || arguments[0] === undefined ? 'toast' : arguments[0];
-        var options = arguments[1];
+        var content = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'toast';
+        var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
 
         if (typeof options === 'number') {
@@ -541,7 +538,7 @@
             callback: $.noop
         }, options);
 
-        var html = '<div>\n            <div class="weui_mask_transparent"></div>\n            <div class="weui_toast">\n                <i class="weui_icon_toast"></i>\n                <p class="weui_toast_content">' + content + '</p>\n            </div>\n        </div>';
+        var html = '<div>\n            <div class="weui-mask_transparent"></div>\n            <div class="weui-toast">\n                <i class="weui-icon_toast weui-icon-success-no-circle"></i>\n                <p class="weui-toast__content">' + content + '</p>\n            </div>\n        </div>';
         var $toast = $(html);
         $('body').append($toast);
 
@@ -582,12 +579,12 @@
 
         }, options);
 
-        var html = '<div class="weui_uploader">\n                        <div class="weui_uploader_hd weui_cell">\n                            <div class="weui_cell_bd weui_cell_primary">' + options.title + '</div>\n                            <div class="weui_cell_ft">0/' + options.maxCount + '</div>\n                        </div>\n                        <div class="weui_uploader_bd">\n                            <ul class="weui_uploader_files">\n                            </ul>\n                            <div class="weui_uploader_input_wrp">\n                                <input class="weui_uploader_input" type="file" accept="' + options.accept.join(',') + '">\n                            </div>\n                        </div>\n                    </div>';
+        var html = '<div class="weui-uploader">\n                        <div class="weui-uploader__hd">\n                            <div class="weui-uploader__title">' + options.title + '</div>\n                            <div class="weui-uploader__info">0/' + options.maxCount + '</div>\n                        </div>\n                        <div class="weui-uploader__bd">\n                            <ul class="weui-uploader__files">\n                            </ul>\n                            <div class="weui-uploader__input-box">\n                                <input class="weui-uploader__input" type="file" accept="' + options.accept.join(',') + '">\n                            </div>\n                        </div>\n                    </div>';
         this.html(html);
 
         var $uploader = this;
-        var $files = this.find('.weui_uploader_files');
-        var $file = this.find('.weui_uploader_input');
+        var $files = this.find('.weui-uploader__files');
+        var $file = this.find('.weui-uploader__input');
         var blobs = [];
 
         /**
@@ -609,17 +606,17 @@
          * error
          */
         function error(index) {
-            var $preview = $files.find('.weui_uploader_file').eq(index);
-            $preview.addClass('weui_uploader_status');
-            $preview.html('<div class="weui_uploader_status_content"><i class="weui_icon_warn"></i></div>');
+            var $preview = $files.find('.weui-uploader__file').eq(index);
+            $preview.addClass('weui-uploader__file_status');
+            $preview.html('<div class="weui-uploader__file-content"><i class="weui-icon-warn"></i></div>');
         }
 
         /**
          * success
          */
         function success(index) {
-            var $preview = $files.find('.weui_uploader_file').eq(index);
-            $preview.removeClass('weui_uploader_status');
+            var $preview = $files.find('.weui-uploader__file_status').eq(index);
+            $preview.removeClass('weui-uploader__file-content');
             $preview.html('');
         }
 
@@ -628,9 +625,9 @@
          * @param msg
          */
         function update(msg) {
-            var $preview = $files.find('.weui_uploader_file').last();
-            $preview.addClass('weui_uploader_status');
-            $preview.html('<div class="weui_uploader_status_content">' + msg + '</div>');
+            var $preview = $files.find('.weui-uploader__file').last();
+            $preview.addClass('weui-uploader__file_status');
+            $preview.html('<div class="weui-uploader__file-content">' + msg + '</div>');
         }
 
         /**
@@ -699,8 +696,8 @@
                         blobs.push({ name: file.name, blob: blob });
                         var blobUrl = URL.createObjectURL(blob);
 
-                        $files.append('<li class="weui_uploader_file " style="background-image:url(' + blobUrl + ')"></li>');
-                        $uploader.find('.weui_uploader_hd .weui_cell_ft').text(blobs.length + '/' + options.maxCount);
+                        $files.append('<li class="weui-uploader__file " style="background-image:url(' + blobUrl + ')"></li>');
+                        $uploader.find('.weui-uploader__hd .weui-cell__ft').text(blobs.length + '/' + options.maxCount);
 
                         // trigger onAddedfile event
                         options.onAddedFile({
@@ -720,7 +717,7 @@
 
                         // 如果数量达到最大, 隐藏起选择文件按钮
                         if (blobs.length >= options.maxCount) {
-                            $uploader.find('.weui_uploader_input_wrp').hide();
+                            $uploader.find('.weui-uploader__input-box').hide();
                         }
                     };
 
@@ -730,7 +727,7 @@
             });
         });
 
-        this.on('click', '.weui_uploader_file', function () {
+        this.on('click', '.weui-uploader__file', function () {
             $.weui.confirm('确定删除该图片?', function () {
                 var index = $(_this).index();
                 _this.remove(index);
@@ -750,14 +747,14 @@
          * @param index
          */
         this.remove = function (index) {
-            var $preview = $files.find('.weui_uploader_file').eq(index);
+            var $preview = $files.find('.weui-uploader__file').eq(index);
             $preview.remove();
             blobs.splice(index, 1);
             options.onRemovedfile(index);
 
             // 如果数量达到最大, 隐藏起选择文件按钮
             if (blobs.length < options.maxCount) {
-                $uploader.find('.weui_uploader_input_wrp').show();
+                $uploader.find('.weui-uploader__input-box').show();
             }
         };
 

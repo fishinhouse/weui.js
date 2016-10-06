@@ -8,7 +8,7 @@
      * @param {String} content
      * @param {Object|Number|Function} [options]
      */
-    $.weui.topTips = function (content = 'topTips', options) {
+    $.weui.topTips = function (content = 'topTips', options = {}) {
 
         if ($topTips) {
             $topTips.remove();
@@ -32,7 +32,7 @@
             duration: 3000,
             callback: $.noop
         }, options);
-        const html = `<div class="weui_toptips weui_warn">${content}</div>`;
+        const html = `<div class="weui-toptips weui-toptips_warn">${content}</div>`;
         $topTips = $(html);
         $topTips.appendTo($('body'));
         if (typeof $topTips.slideDown === 'function') {

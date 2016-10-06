@@ -19,27 +19,27 @@
         }, options);
 
         const buttons = options.buttons.map((button) => {
-            return `<a href="javascript:;" class="weui_btn_dialog ${button.type}">${button.label}</a>`;
+            return `<a href="javascript:;" class="weui-dialog__btn weui-dialog__btn_${button.type}">${button.label}</a>`;
         }).join('\n');
         const html = `<div class="${options.className}">
-                <div class="weui_mask"></div>
-                <div class="weui_dialog">
-                    <div class="weui_dialog_hd">
-                        <strong class="weui_dialog_title">
+                <div class="weui-mask"></div>
+                <div class="weui-dialog">
+                    <div class="weui-dialog__hd">
+                        <strong class="weui-dialog__title">
                             ${options.title}
                         </strong>
                     </div>
-                    <div class="weui_dialog_bd">
+                    <div class="weui-dialog__bd">
                         ${options.content}
                     </div>
-                    <div class="weui_dialog_ft">
+                    <div class="weui-dialog__ft">
                         ${buttons}
                     </div>
                 </div>
             </div>`;
         $dialog = $(html);
         $('body').append($dialog);
-        $dialog.on('click', '.weui_btn_dialog', function () {
+        $dialog.on('click', '.weui-dialog__btn', function () {
             const button = options.buttons[$(this).index()];
             const cb = button.onClick || $.noop;
             cb.call();

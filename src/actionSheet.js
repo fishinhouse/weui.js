@@ -9,18 +9,18 @@
      */
     $.weui.actionSheet = function (menus = [], actions = [{label: '取消'}]) {
         const cells = menus.map((item, idx) => {
-            return `<div class="weui_actionsheet_cell">${item.label}</div>`;
+            return `<div class="weui-actionsheet__cell">${item.label}</div>`;
         }).join('');
         const action = actions.map((item, idx) => {
-            return `<div class="weui_actionsheet_cell">${item.label}</div>`;
+            return `<div class="weui-actionsheet__cell">${item.label}</div>`;
         }).join('');
         const html = `<div>
-            <div class="weui_mask_transition"></div>
-            <div class="weui_actionsheet">
-                <div class="weui_actionsheet_menu">
+            <div class="weui-mask"></div>
+            <div class="weui-actionsheet">
+                <div class="weui-actionsheet__menu">
                     ${cells}
                 </div>
-                <div class="weui_actionsheet_action">
+                <div class="weui-actionsheet__action">
                     ${action}
                 </div>
             </div>
@@ -30,18 +30,18 @@
         $('body').append($actionSheetWrapper);
 
         // add class
-        $actionSheetWrapper.find('.weui_mask_transition').show().addClass('weui_fade_toggle');
-        $actionSheetWrapper.find('.weui_actionsheet').addClass('weui_actionsheet_toggle');
+        $actionSheetWrapper.find('.weui-mask').show();
+        $actionSheetWrapper.find('.weui-actionsheet').addClass('weui-actionsheet_toggle');
 
         // bind event
-        $actionSheetWrapper.on('click', '.weui_actionsheet_menu .weui_actionsheet_cell', function (){
+        $actionSheetWrapper.on('click', '.weui-actionsheet__menu .weui-actionsheet__cell', function (){
             const item = menus[$(this).index()];
             const cb = item.onClick || $.noop;
             cb.call();
             $.weui.hideActionSheet();
-        }).on('click', '.weui_mask_transition', function (){
+        }).on('click', '.weui-mask', function (){
             $.weui.hideActionSheet();
-        }).on('click', '.weui_actionsheet_action .weui_actionsheet_cell', function (){
+        }).on('click', '.weui-actionsheet__action .weui-actionsheet__cell', function (){
             const item = actions[$(this).index()];
             const cb = item.onClick || $.noop;
             cb.call();
@@ -54,16 +54,13 @@
             return;
         }
 
-        var $mask = $actionSheetWrapper.find('.weui_mask_transition');
-        var $actionsheet = $actionSheetWrapper.find('.weui_actionsheet');
+        var $mask = $actionSheetWrapper.find('.weui-mask');
+        var $actionsheet = $actionSheetWrapper.find('.weui-actionsheet');
 
-        $mask.removeClass('weui_fade_toggle');
-        $actionsheet.removeClass('weui_actionsheet_toggle');
+        $mask.hide();
+        $actionsheet.removeClass('weui-actionsheet_toggle');
 
-        $actionsheet.on('transitionend', function () {
-            $actionSheetWrapper.remove();
-            $actionSheetWrapper = null;
-        }).on('webkitTransitionEnd', function () {
+        $actionsheet.on('transitionend webkitTransitionEnd', function () {
             $actionSheetWrapper.remove();
             $actionSheetWrapper = null;
         });
