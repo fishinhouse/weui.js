@@ -40,7 +40,7 @@
                     || $dom.attr("tips")
                     || $dom.attr("placeholder");
             if(tips) $.weui.topTips(tips);
-            $dom.parents(".weui_cell").addClass("weui_cell_warn");
+            $dom.parents(".weui-cell").addClass("weui-cell_warn");
         }
     }
 
@@ -63,7 +63,7 @@
                 })
                 .on("focus", function(){
                     var $this = $(this);
-                    $this.parents(".weui_cell").removeClass("weui_cell_warn");
+                    $this.parents(".weui-cell").removeClass("weui-cell_warn");
                 });
         });
     };

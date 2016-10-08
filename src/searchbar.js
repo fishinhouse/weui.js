@@ -1,55 +1,55 @@
 (function ($) {
     $.fn.searchBar = function (options) {
         options = $.extend({
-            focusingClass:'weui_search_focusing',
+            focusingClass:'weui-search-bar_focusing',
             searchText:"搜索",
             cancelText:"取消"
         },options);
 
-        let html = `<div class="weui_search_bar">
-                    <form class="weui_search_outer">
-                        <div class="weui_search_inner">
-                            <i class="weui_icon_search"></i>
-                            <input type="search" class="weui_search_input" id="weui_search_input" placeholder="${options.searchText}" required/>
-                            <a href="javascript:" class="weui_icon_clear"></a>
+        let html = `<div class="weui-search-bar">
+                    <form class="weui-search-bar__form">
+                        <div class="weui-search-bar__box">
+                            <i class="weui-icon-search"></i>
+                            <input type="search" class="weui-search-bar__input" id="weui-search-bar__input" placeholder="${options.searchText}" required/>
+                            <a href="javascript:" class="weui-icon-clear"></a>
                         </div>
-                        <label for="weui_search_input" class="weui_search_text">
-                            <i class="weui_icon_search"></i>
+                        <label for="weui-search-bar__input" class="weui-search-bar__label">
+                            <i class="weui-icon-search"></i>
                             <span>${options.searchText}</span>
                         </label>
                     </form>
-                    <a href="javascript:" class="weui_search_cancel">${options.cancelText}</a>
+                    <a href="javascript:" class="weui-search-bar__cancel-btn">${options.cancelText}</a>
                 </div>`;
 
         let $search = $(html);
         this.append($search);
 
-        const $searchBar = this.find('.weui_search_bar');
-        const $searchText = this.find('.weui_search_text');
-        const $searchInput = this.find('.weui_search_input');
+        const $searchBar = this.find('.weui-search-bar');
+        const $searchText = this.find('.weui-search-bar__label');
+        const $searchInput = this.find('.weui-search-bar__input');
 
-        this.on('focus', '#weui_search_input', function () {
+        this.on('focus', '#weui-search-bar__input', function () {
             $searchText.hide();
             $searchBar.addClass(options.focusingClass);
             bindEvent($searchInput, 'onfocus', options);
-        }).on('blur', '#weui_search_input', function () {
+        }).on('blur', '#weui-search-bar__input', function () {
             $searchBar.removeClass(options.focusingClass);
             !!$(this).val() ? $searchText.hide() : $searchText.show();
             bindEvent($searchInput, 'onblur', options);
-        }).on('touchend', '.weui_search_cancel', function () {
+        }).on('touchend', '.weui-search-bar__cancel-btn', function () {
             $searchInput.val('');
             bindEvent($searchInput, 'oncancel', options);
-        }).on('touchend', '.weui_icon_clear', function (e) {
+        }).on('touchend', '.weui-icon-clear', function (e) {
             //阻止默认动作
             e.preventDefault();
             $searchInput.val('');
-            if(document.activeElement.id != 'search_input') {
+            if(document.activeElement.id != 'weui-search-bar__input') {
                 $searchInput.trigger('focus');
             }
             bindEvent($searchInput, 'onclear', options);
-        }).on('input', '.weui_search_input', function () {
+        }).on('input', '.weui-search-bar__input', function () {
             bindEvent($searchInput, 'input', options);
-        }).on('submit', '.weui_search_outer', function () {
+        }).on('submit', '.weui-search-bar__form', function () {
             if(typeof(options.onsubmit) == 'function'){
                 bindEvent($searchInput, 'onsubmit', options);
                 return false;

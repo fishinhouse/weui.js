@@ -22,7 +22,7 @@
                 onClick: yes
             }]
         }, type ? {} : options);
-        options.className = `weui_dialog_alert ${options.className}`;
+        options.className = `weui-dialog_alert ${options.className}`;
 
         $.weui.dialog(options);
     };

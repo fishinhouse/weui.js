@@ -28,7 +28,7 @@
                 onClick: yes || $.noop
             }]
         }, type ? {} : options);
-        options.className = `weui_dialog_confirm ${options.className}`;
+        options.className = `weui-dialog_confirm ${options.className}`;
 
         $.weui.dialog(options);
     };

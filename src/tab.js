@@ -3,11 +3,11 @@
     $.fn.tab = function (options){
         options = $.extend({
             defaultIndex: 0,
-            activeClass: `weui_bar_item_on`,
+            activeClass: `weui-bar__item_on`,
             onToggle: $.noop
         }, options);
-        const $tabbarItems = this.find('.weui_tabbar_item, .weui_navbar_item');
-        const $tabBdItems = this.find('.weui_tab_bd_item');
+        const $tabbarItems = this.find('.weui-tabbar__item, .weui-navbar__item');
+        const $tabBdItems = this.find('.weui-tab__panel');
 
         this.toggle = function (index){
             const $defaultTabbarItem = $tabbarItems.eq(index);
@@ -20,7 +20,7 @@
         };
         const self = this;
 
-        this.on('click', '.weui_tabbar_item, .weui_navbar_item', function (e){
+        this.on('click', '.weui-tabbar__item, .weui-navbar__item', function (e){
             const index = $(this).index();
             self.toggle(index);
         });

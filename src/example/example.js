@@ -96,10 +96,10 @@ $(function () {
     });
 
     // tab
-    $('.weui_tab').tab();
+    $('.weui-tab').tab();
 
     // searchBar
-    $('.search_bar_wrap').searchBar({
+    $('.searchbar-wrp').searchBar({
         //替换原模板的“取消”
         cancelText: "取消",
         //替换原模板的“搜索”
