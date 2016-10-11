@@ -71,10 +71,12 @@
         /**
          * success
          */
-        function success(index) {
-            const $preview = $files.find('.weui-uploader__file_status').eq(index);
+       function success(index,res) {
+            var $preview = $files.find('.weui-uploader__file_status').eq(index);
             $preview.removeClass('weui-uploader__file-content');
             $preview.html('');
+            var $preview1 = $files.find('.weui-uploader__file').eq(index);
+            $preview1.html('<input name="weui_uploader__file" value="' + res + '" type="hidden" />');
         }
 
         /**
@@ -100,7 +102,7 @@
                 processData: false,
                 contentType: false
             }).success((res) => {
-                success(index);
+                success(index,res);
                 options.onSuccess(res);
             }).error((err) => {
                 error(index);
