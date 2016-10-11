@@ -153,8 +153,9 @@
                         const blobUrl = URL.createObjectURL(blob);
 
                         $files.append(`<li class="weui-uploader__file " style="background-image:url(${blobUrl})"></li>`);
-                        $uploader.find('.weui-uploader__hd .weui-cell__ft').text(`${blobs.length}/${options.maxCount}`);
-
+                        //$uploader.find('.weui-uploader__hd .weui-cell__ft').text(`${blobs.length}/${options.maxCount}`);
+                         $('.weui-uploader__info').last().text(blobs.length + '/' + options.maxCount);
+                        
                         // trigger onAddedfile event
                         options.onAddedFile({
                             lastModified: file.lastModified,
