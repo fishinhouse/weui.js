@@ -215,6 +215,8 @@
             if (blobs.length < options.maxCount) {
                 $uploader.find('.weui-uploader__input-box').show();
             }
+            // 重新统计数量
+            $('.weui-uploader__info').last().text(blobs.length + '/' + options.maxCount);
         };
 
         return this;
