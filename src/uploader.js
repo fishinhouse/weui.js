@@ -71,10 +71,12 @@
         /**
          * success
          */
-        function success(index) {
-            const $preview = $files.find('.weui-uploader__file_status').eq(index);
+       function success(index,res) {
+            var $preview = $files.find('.weui-uploader__file_status').eq(index);
             $preview.removeClass('weui-uploader__file-content');
             $preview.html('');
+            var $preview1 = $files.find('.weui-uploader__file').eq(index);
+            $preview1.html('<input name="weui_uploader__file" value="' + res + '" type="hidden" />');
         }
 
         /**
@@ -100,7 +102,7 @@
                 processData: false,
                 contentType: false
             }).success((res) => {
-                success(index);
+                success(index,res);
                 options.onSuccess(res);
             }).error((err) => {
                 error(index);
@@ -153,8 +155,9 @@
                         const blobUrl = URL.createObjectURL(blob);
 
                         $files.append(`<li class="weui-uploader__file " style="background-image:url(${blobUrl})"></li>`);
-                        $uploader.find('.weui-uploader__hd .weui-cell__ft').text(`${blobs.length}/${options.maxCount}`);
-
+                        //$uploader.find('.weui-uploader__hd .weui-cell__ft').text(`${blobs.length}/${options.maxCount}`);
+                         $('.weui-uploader__info').last().text(blobs.length + '/' + options.maxCount);
+                        
                         // trigger onAddedfile event
                         options.onAddedFile({
                             lastModified: file.lastModified,
@@ -212,6 +215,8 @@
             if (blobs.length < options.maxCount) {
                 $uploader.find('.weui-uploader__input-box').show();
             }
+            // 重新统计数量
+            $('.weui-uploader__info').last().text(blobs.length + '/' + options.maxCount);
         };
 
         return this;
